@@ -1,8 +1,6 @@
-(ns voodoo.test.ooyala-test
+(ns voodoo.ooyala-test
   (:require [clojure.test  :refer :all]
-            [voodoo.ooyala :refer :all])
-  (:use clojure.test
-        voodoo.ooyala)
+            [voodoo.ooyala :refer :all]))
 
 (def ^{:dynamic true} *api-key*    "7ab06")
 (def ^{:dynamic true} *secret-key* "329b5b204d0f11e0a2d060334bfffe90ab18xqh5")
