@@ -6,7 +6,7 @@
 
 (deftest request-test-one
   (let [http-method         "post"
-        request-path        "/v2/players/HbxJKM"
+        request-path        "players/HbxJKM"
         query-string-params {"api_key" "7ab06" "expires" 1299991855}
         request-body        "test"]
     (is (= "fJrWCcIqeRBZUqa61OV%2B6XOWfpkab6RdW5hJZmZh1CI" 
