@@ -1,6 +1,11 @@
 (ns voodoo.core)
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+(def ^:dynamic *rest-api* "api.ooyala.com/v2")
+
+(defn- get-request-args
+  [verb uri arg-map]
+  (let [body      (:body arg-map)
+        query     (reduce (fn [seed+= k=v] (str seed+= k=v)) "?"
+                     (map (fn [param] (str (name (first param)) "=" (second param))) (:query (:params arg-map))))
+        final-uri (str uri query)]
+   (final-uri)))
