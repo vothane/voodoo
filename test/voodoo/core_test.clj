@@ -8,3 +8,10 @@
         params {:params {:query {:where "labels INCLUDES 'Sports' AND labels INCLUDES 'Baseball'"}}}
         actual "api.ooyala.com/v2/assets?where=labels INCLUDES 'Sports' AND labels INCLUDES 'Baseball'"]
     (is (= (http-request verb uri params) actual))))
+
+(def-ooyala-restful-method :get "assets")
+
+(deftest macro-test
+  (let [result (assets {:params {:query {:where "labels INCLUDES 'Sports' AND labels INCLUDES 'Baseball'"}}})
+        actual "api.ooyala.com/v2/assets?where=labels INCLUDES 'Sports' AND labels INCLUDES 'Baseball'"]
+    (is (= result actual))))  
