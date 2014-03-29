@@ -2,6 +2,9 @@
   (:require [clojure.test  :refer :all]
             [voodoo.query :refer :all]))
 
+(defn query [max desc]
+  (WHERE (AND (< duration ~max) (= description ~desc))))
+
 (deftest query-test
   (let [result (query 600 "cat funny")
         actual ["where=duration < ? AND description = ?" [600 "cat funny"]]]
