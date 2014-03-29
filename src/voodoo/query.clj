@@ -24,6 +24,13 @@
   [(expand-clause (cons 'WHERE args))
    (vec (for [n (tree-seq coll? seq args) :when (and (coll? n) (= (first n) `unquote))] (second n)))])
 
+(defn- quote-if-string
+  [value]
+  (if (instance? String value) 
+    (str "'" value "'")
+    value))
+
 (defn get-ooyala-query
   [query-with-clauses]
-  (reduce (fn [query-string clause] (str/replace-first query-string "?" clause)) (first query-with-clauses) (second query-with-clauses)))
+  (reduce (fn [query-string clause] (str/replace-first query-string "?" clause)) 
+            (first query-with-clauses) (map quote-if-string (second query-with-clauses))))
