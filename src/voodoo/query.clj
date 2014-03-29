@@ -1,13 +1,19 @@
 (ns voodoo.query
   (:require [clojure.string :as str]))
 
+(defn- spaces
+  [operator]
+  (if (or (= (name operator) "AND") (= (name operator) "OR"))
+    (str " ")
+    (str "")))
+
 (defn expand-expr 
   [expr]
   (if (coll? expr)
     (if (= (first expr) `unquote)
       "?"
       (let [[op & args] expr]
-        (str (str/join (str " " op " ") (map expand-expr args)))))
+        (str (str/join (str (spaces op) op (spaces op)) (map expand-expr args)))))
     expr))
 
 (declare expand-clause)
