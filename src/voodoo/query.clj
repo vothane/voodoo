@@ -1,7 +1,8 @@
 (ns voodoo.query
   (:require [clojure.string :as str]))
 
-(defn expand-expr [expr]
+(defn expand-expr 
+  [expr]
   (if (coll? expr)
     (if (= (first expr) `unquote)
       "?"
@@ -14,12 +15,15 @@
 (def clause-map
   {'WHERE (fn [expr] (str "where=" (expand-expr expr)))})
 
-(defn expand-clause [[op & args]]
+(defn expand-clause 
+  [[op & args]]
   (apply (clause-map op) args))
 
-(defmacro WHERE [& args]
+(defmacro WHERE 
+  [& args]
   [(expand-clause (cons 'WHERE args))
    (vec (for [n (tree-seq coll? seq args) :when (and (coll? n) (= (first n) `unquote))] (second n)))])
 
-;(reduce (fn [a b] (str/replace-first a "?" b)) (first t) (second t))
-;"where=duration < 600 AND description = cat funny"
+(defn get-ooyala-query
+  [query-with-clauses]
+  (reduce (fn [query-string clause] (str/replace-first query-string "?" clause)) (first query-with-clauses) (second query-with-clauses)))
