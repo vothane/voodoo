@@ -2,12 +2,12 @@
   (:require [clojure.test  :refer :all]
             [voodoo.ooyala :refer :all]))
 
-(def ^{:dynamic true} *secret-key* "329b5b204d0f11e0a2d060334bfffe90ab18xqh5")
+(def ^{:dynamic true} *secret-key* "nU2WjeYoEY0MJKtK1DRpp1c6hNRoHgwpNG76dJkX")
 
 (deftest request-test-one
-  (let [http-method         "post"
-        request-path        "players/HbxJKM"
-        query-string-params {"api_key" "7ab06" "expires" 1299991855}
-        request-body        "test"]
-    (is (= "fJrWCcIqeRBZUqa61OV%2B6XOWfpkab6RdW5hJZmZh1CI" 
+  (let [http-method         "GET"
+        request-path        "/v2/assets"
+        query-string-params {"api_key" "JkN2w61tDmKgPl4y395Rp1vAdlcq.IqBgb" "expires" 1577898300}
+        request-body        nil]
+    (is (= "ClzQGSks95XkKXcGig5StzjtjGLlzAuD3ZtIT0TQReA" 
            (request-signature *secret-key* http-method request-path query-string-params request-body)))))
