@@ -1,8 +1,17 @@
 (ns voodoo.ooyala
   (:require [clojure.data.codec.base64 :as Base64])
-  (:import [java.security MessageDigest]))
+  (:import [java.security MessageDigest])
+  (:use [clojure.string :as s]))
 
 (def ^{:dynamic true} *hash* "SHA-256")
+
+(defn- clean-signature
+  [sign]
+  (let [sign-trimmed (s/trim sign)
+        reverse-sign (s/reverse sign-trimmed)]
+    (if (= (first reverse-sign) \=)
+      (s/reverse (s/replace-first reverse-sign "=" ""))
+      sign-trimmed)))
 
 (defn request-signature [secret http-method request-path query-string-params request-body]
   (let [seed-string      (str secret http-method request-path)
@@ -11,4 +20,4 @@
                                 (map (fn [param] (str (first param) "=" (second param))) sorted-params))
                            request-body)
         hash-signature   (Base64/encode (.digest (MessageDigest/getInstance *hash*) (.getBytes signature-string)))]
-    (subs (String. hash-signature) 0 43)))
+    (clean-signature (subs (String. hash-signature) 0 43))))
