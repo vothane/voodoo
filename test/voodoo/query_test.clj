@@ -7,5 +7,5 @@
 
 (deftest query-test
   (let [result (get-ooyala-query (query 600 "cat funny"))
-        actual "where=duration<600 AND description='cat funny'"]
+        actual "duration<600 AND description='cat funny'"]
     (is (= result actual))))
