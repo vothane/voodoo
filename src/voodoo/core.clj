@@ -9,17 +9,22 @@
 
 (defn- get-request-uri
   [uri arg-map]
-  (let [body      (:body arg-map)
-        query     (reduce (fn [seed+= k=v] (str seed+= k=v)) "?"
-                    (interpose "&" 
-                      (map (fn [param] (str (name (first param)) "=" (second param))) arg-map)))]
-   (str uri query)))
+  (let [body  (:body arg-map)
+        query (client/generate-query-string arg-map)]
+   (str uri "?" query)))
+
+(def http-request-map
+  {"GET"  (fn [uri] (client/get (str "http://" uri)))
+   "POST" (fn [uri body] (client/post uri body))})
 
 (defn http-request
   [verb uri parameters]  
-  (let [sorted-params (into (sorted-map) parameters) 
-        request-uri   (get-request-uri uri sorted-params)]
-    (println (str "client" "/" (s/lower-case verb) " " request-uri))));(eval (read-string (str "client" "/" (s/lower-case verb) " " request-uri)))))
+  (let [sorted-params (into (sorted-map) parameters)  
+        get-request   (http-request-map verb)        
+        request-uri   (get-request-uri uri sorted-params)] 
+    (try        
+      (get-request request-uri)
+      (catch Exception e (str "caught exception: " (.getMessage e))))))
 
 (defmacro def-ooyala-method
   [fn-name verb resource-path]
