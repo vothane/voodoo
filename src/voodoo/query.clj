@@ -19,7 +19,7 @@
 (declare expand-clause)
 
 (def clause-map
-  {'WHERE (fn [expr] (str "where=" (expand-expr expr)))})
+  {'WHERE (fn [expr] (str (expand-expr expr)))})
 
 (defn expand-clause 
   [[op & args]]
