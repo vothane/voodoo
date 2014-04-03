@@ -16,6 +16,7 @@
     (let [query-string (get-ooyala-query (query 10 "Iron Man, Thor, Captain America, and the Hulk"))
           response     (assets {:params {:query {:where query-string}}})
           result       (get-response-data response)]
+      (is (= (:status response) 200))   
       (is (= (get result "name") "Avengers"))
       (is (= (get result "duration") 143477))
       (is (= (get result "description") (str "Nick Fury, the director of S.H.I.E.L.D., assembles a group of " 
@@ -23,3 +24,15 @@
                                              "the Hulk to fight a new enemy that is threatening the safety of "
                                              "the world.")))
       (is (= (get result "embed_code") "o1NmdxMzrrWwbOVk_wIqhw-AmhlOMO49")))))
+
+
+(def-ooyala-restful-method :get "labels")
+
+(deftest labels-test
+
+  (testing "get all labels"
+    (let [response (labels {})
+          result   (get-response-data response)]
+      (is (= (:status response) 200))
+      (is (= (get result "full_name") "/Movie Trailer"))
+      (is (= (get result "id") "b5e9bf9a0e5a4b31991cfdf9218c4342")))))
