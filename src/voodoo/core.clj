@@ -35,10 +35,11 @@
            expiration# {:expires (oo/expires)}
            query#      (get-in params# [:params :query])
            body#       (get-in params# [:params :body])
-           signature#  {:signature (oo/request-signature *secret* http-verb# ~resource-path query# body#)}
-           params-map# (merge api-key# expiration# signature# query#)
+           params-map# (merge api-key# expiration# query#)
+           signature#  {:signature (oo/request-signature *secret* http-verb# ~(str "/v2/" resource-path) params-map# body#)}
+           all-params# (merge params-map# signature#)
            uri#        (str *rest-api* "/" ~resource-path)]
-       (http-request http-verb# uri# params-map#))))
+       (http-request http-verb# uri# all-params#))))
 
 (defmacro def-ooyala-restful-method
   [verb resource-path & options]
