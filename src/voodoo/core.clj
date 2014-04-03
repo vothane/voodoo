@@ -22,7 +22,7 @@
   (let [sorted-params (into (sorted-map) parameters)  
         get-request   (http-request-map verb)        
         request-uri   (get-request-uri uri sorted-params)] 
-    (try        
+    (try            
       (get-request request-uri)
       (catch Exception e (str "caught exception: " (.getMessage e))))))
 
@@ -43,7 +43,7 @@
 
 (defmacro def-ooyala-restful-method
   [verb resource-path & options]
-  (let [dashed-name (clojure.string/replace resource-path #"[^a-zA-Z]+" "-")
+  (let [dashed-name (clojure.string/replace resource-path #"[^0-9a-zA-Z]+" "-")
         clean-name  (clojure.string/replace dashed-name #"-$" "")
         fn-name     (symbol clean-name)]
     `(def-ooyala-method ~fn-name ~verb ~resource-path ~@options)))

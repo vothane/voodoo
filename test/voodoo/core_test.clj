@@ -36,3 +36,28 @@
       (is (= (:status response) 200))
       (is (= (get result "full_name") "/Movie Trailer"))
       (is (= (get result "id") "b5e9bf9a0e5a4b31991cfdf9218c4342")))))
+
+
+(def-ooyala-restful-method :get "players")
+
+(deftest players-test
+
+  (testing "get meta-data for all video players"
+    (let [response (players {})
+          result   (get-response-data response)]
+      (is (= (:status response) 200))
+      (is (= (get result "name") "test player"))
+      (is (= (get result "playback") {"buffer_on_pause" false})))))
+
+
+(def-ooyala-restful-method :get "players/447b53e1c17c447f8dbbd912b1fbc522")
+
+(deftest find-player-by-id-test
+
+  (testing "get meta-data for particular player with id of 447b53e1c17c447f8dbbd912b1fbc522"
+    (let [response (players-447b53e1c17c447f8dbbd912b1fbc522 {})
+          result   (get-response-data response)
+          _ (println result)]
+      (is (= (:status response) 200))
+      (is (= (get result "name") "test player"))
+      (is (= (get result "playback") {"buffer_on_pause" false})))))
