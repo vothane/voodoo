@@ -28,7 +28,7 @@
 
 (def get-labels (def-ooyala-method :get "labels"))
 
-(deftest labels-test
+(deftest get-labels-test
 
   (testing "get all labels"
     (let [response (get-labels)
@@ -56,8 +56,7 @@
 
   (testing "get meta-data for particular player with id of 447b53e1c17c447f8dbbd912b1fbc522"
     (let [response (get-player)
-          result   (get-response-data response)
-          _ (println result)]
+          result   (get-response-data response)]
       (is (= (:status response) 200))
       (is (= (get result "name") "test player"))
       (is (= (get result "playback") {"buffer_on_pause" false})))))

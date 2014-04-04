@@ -33,4 +33,8 @@
 
 (defn get-response-data
   [response]
-  (first (get (json/read-str (:body response)) "items")))
+  (let [parsed-resp (json/read-str (:body response))]
+    (if (contains? parsed-resp "items")
+      (first (get parsed-resp "items"))
+      parsed-resp)))
+;(tree-seq map? (fn [sub-map] (flatten (seq sub-map))) (json/read-str (:body response)))
