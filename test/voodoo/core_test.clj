@@ -37,6 +37,16 @@
       (is (= (get result "full_name") "/Movie Trailer"))
       (is (= (get result "id") "b5e9bf9a0e5a4b31991cfdf9218c4342")))))
 
+(def create-label (def-ooyala-method :post "labels"))
+
+(deftest create-label-test
+
+  (testing "create a new label"
+    (let [response (create-label {:name "new label"})
+_ (println response)   ]       
+          ;result   (get-response-data response)]
+      (is (= (:status response) 200)))))
+
 
 (def get-players (def-ooyala-method :get "players"))
 
