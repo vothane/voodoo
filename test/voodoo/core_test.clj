@@ -42,10 +42,10 @@
 (deftest create-label-test
 
   (testing "create a new label"
-    (let [response (create-label {:name "new label"})
-_ (println response)   ]       
-          ;result   (get-response-data response)]
-      (is (= (:status response) 200)))))
+    (let [response (create-label {:params {:body {:name "new label"}}})    
+          result   (get-response-data response)] 
+      (is (= (:status response) 200))
+      (is (= (get result "name") "new label")))))
 
 
 (def get-players (def-ooyala-method :get "players"))

@@ -1,7 +1,8 @@
 (ns voodoo.core
   (:require [clj-http.client :as client]
             [voodoo.ooyala :as oo]
-            [clojure.string :as s]))
+            [clojure.string :as s]
+            [cheshire.core :refer :all]))
 
 (def ^:dynamic *rest-api* "api.ooyala.com/v2")
 (def ^:dynamic *api-key* "JkN2w61tDmKgPl4y395Rp1vAdlcq.IqBgb")
@@ -15,14 +16,14 @@
 
 (def http-request-map
   {"GET"  (fn [uri & ignore] (client/get uri))
-   "POST" (fn [uri body] (client/post uri body))})
+   "POST" (fn [uri body] (client/post uri {:body (generate-string body)}))})
 
 (defn http-request
   [verb uri parameters body]  
   (let [sorted-params (into (sorted-map) parameters)  
-        get-request   (http-request-map verb)        
+        get-request   (get http-request-map verb)        
         request-uri   (get-request-uri uri sorted-params)] 
-    (try                
+    (try                           
       (get-request request-uri body)
     (catch Exception e (str "caught exception: " (.getMessage e))))))
 

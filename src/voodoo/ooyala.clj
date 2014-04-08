@@ -1,7 +1,7 @@
 (ns voodoo.ooyala
   (:require [clojure.data.codec.base64 :as Base64]
             [clojure.string :as s]
-            [clojure.data.json :as json])
+            [cheshire.core :refer :all])
   (:import [java.security MessageDigest]))
 
 (def ^{:dynamic true} *hash* "SHA-256")
@@ -21,19 +21,19 @@
         sorted-params    (sort query-string-params)
         signature-string (str (reduce (fn [seed+= k=v] (str seed+= k=v)) seed-string
                                 (map (fn [param] (str (name (first param)) "=" (second param))) sorted-params))
-                           request-body)
-        hash-signature   (Base64/encode (.digest (MessageDigest/getInstance *hash*) (.getBytes signature-string)))]
+                           (when-not (nil? request-body) (generate-string request-body)))
+        hash-signature   (Base64/encode (.digest (MessageDigest/getInstance *hash*) (.getBytes signature-string)))]       
     (clean-signature (subs (String. hash-signature) 0 43))))
 
 (defn expires
   []
-  (let [now+expiration-window (+ (/ (System/currentTimeMillis) 1000) 25)
+  (let [now+expiration-window (+ (/ (System/currentTimeMillis) 1000) 100)
         round-up              (- *round-up-time* (mod now+expiration-window *round-up-time*))]
     (+ now+expiration-window round-up)))
 
 (defn get-response-data
   [response]
-  (let [parsed-resp (json/read-str (:body response))]
+  (let [parsed-resp (parse-string (:body response))]
     (if (contains? parsed-resp "items")
       (first (get parsed-resp "items"))
       parsed-resp)))
