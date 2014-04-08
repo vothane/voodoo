@@ -70,3 +70,14 @@
       (is (= (:status response) 200))
       (is (= (get result "name") "test player"))
       (is (= (get result "playback") {"buffer_on_pause" false})))))
+
+(def create-player (def-ooyala-method :post "players"))
+(def rand-id (rand-int 99))
+
+(deftest create-player-test
+
+  (testing "create a new player via POST HTTP request"
+    (let [response (create-player {:params {:body {:name (str "player" rand-id)}}})
+          result   (get-response-data response)]
+      (is (= (:status response) 200))
+      (is (= (get result "name") (str "player" rand-id))))))
