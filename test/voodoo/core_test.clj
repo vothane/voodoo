@@ -47,6 +47,16 @@
       (is (= (:status response) 200))
       (is (= (get result "name") "new label")))))
 
+(def rename-label (def-ooyala-method :patch "labels/b5e9bf9a0e5a4b31991cfdf9218c4342"))
+
+(deftest rename-label-test
+
+  (testing "rename an existing label via HTTP PATCH"
+    (let [response (rename-label {:params {:body {:name "Renamed label"}}})    
+          result   (get-response-data response)] 
+      (is (= (:status response) 200))
+      (is (= (get result "name") "Renamed label")))))
+
 
 (def get-players (def-ooyala-method :get "players"))
 

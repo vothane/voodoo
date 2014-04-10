@@ -15,8 +15,11 @@
    (str uri "?" query)))
 
 (def http-request-map
-  {"GET"  (fn [uri & ignore] (client/get uri))
-   "POST" (fn [uri body] (client/post uri {:body (generate-string body)}))})
+  {"GET"    (fn [uri & ignore] (client/get uri))
+   "POST"   (fn [uri body]     (client/post uri {:body (generate-string body)}))
+   "DELETE" (fn [uri & ignore] (client/delete uri))
+   "PUT"    (fn [uri body]     (client/put uri {:body (generate-string body)}))
+   "PATCH"  (fn [uri body]     (client/patch uri {:body (generate-string body)}))})
 
 (defn http-request
   [verb uri parameters body]  
